@@ -8,7 +8,7 @@
 npm install drainage
 ```
 
-## Example
+## Documentation
 
 ```javascript
 var drainage = require('drainage');
