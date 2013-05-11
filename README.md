@@ -1,6 +1,6 @@
 #drainage
 
-> Simple pausable id based queue system with shortage notification
+> Simple pausable id based queue system with shortage notification and priority
 
 ## Install
 
@@ -13,8 +13,11 @@ npm install drainage
 ```javascript
 var drainage = require('drainage');
 
-// concurrency is by default 1
-var queue = drainage({concurrency: 100}, function (task) {
+// concurrency is by default 1 and there is no priority. In this example
+//   the concurrency is 100
+//   the priority of a task can be a integer between 0 and 10,
+//     small intervals is best for performance
+var queue = drainage({concurrency: 100, priority: [0, 10]}, function (task) {
   process.nextTick(function () {
     console.log(task.message);
 
@@ -23,9 +26,9 @@ var queue = drainage({concurrency: 100}, function (task) {
   });
 });
 
-// All tasks must have some id, also note that queue perform no validation
-// of this!
-queue.push({id: 0, message: 'hallo world'});
+// All tasks must have some id, and priority is used it must also have a priority
+// number. Note that `drainage` perform no validation of this!
+queue.push({id: 0, priority: 5, message: 'hallo world'});
 
 queue.on('shortage', function (amount) {
   // `amount` is a number there is >= 0 and indicates the needed amount of tasks
