@@ -6,6 +6,7 @@ var JOBS = 'abcdefghijklmnopqrstuvxyz'.split('').map(function (value, index) {
   return {id: index, job: value};
 });
 
+/*
 test('can process simple job with 1 concurrency', function (t) {
   var jobnum = 0;
   var queue = drainage(function (task) {
@@ -22,6 +23,7 @@ test('can process simple job with 1 concurrency', function (t) {
   queue.push(JOBS[0]);
   queue.push(JOBS[1]);
 });
+*/
 
 test('will emit shortage once tasks is needed', function (t) {
   var jobnum = 0;
@@ -40,13 +42,9 @@ test('will emit shortage once tasks is needed', function (t) {
     t.equal(amount, 1);
 
     queue.once('shortage', function (amount) {
-      t.equal(amount, 0);
+      t.equal(amount, 1);
 
-      queue.once('shortage', function (amount) {
-        t.equal(amount, 1);
-
-        queue.push(JOBS[1]);
-      });
+      queue.push(JOBS[1]);
     });
 
     queue.push(JOBS[0]);
@@ -141,14 +139,17 @@ test('will order tasks by priority', function (t) {
       order.push(task);
       jobnum += 1;
 
-      if (jobnum === 4) {
-        t.deepEqual(order, expected);
-        t.end();
-      }
-
       queue.done(task);
     });
   });
+	
+	queue.once('shortage', function (amount) {
+    if (jobnum === 4) {
+      t.equal(amount, 1);
+      t.deepEqual(order, expected);
+      t.end();
+    }
+	});
 
   queue.push(expected[0]);
   queue.push(expected[2]);

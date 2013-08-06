@@ -31,6 +31,7 @@ function Drainage(options, handler) {
   this._queueIds = this._priority ? arrays(this._priority[0], this._priority[1]) : [];
   this._queueValues = {};
 
+	this._shortageEmitting = false;
   this._inprogress = 0;
   this._paused = false;
 
@@ -94,6 +95,8 @@ Drainage.prototype._nextTask = function () {
 
 // internal method for draining the queue
 Drainage.prototype._process = function () {
+  var self = this;
+
   while(this._inprogress < this._concurrency &&
         this._queueLength !== 0 &&
         this._paused === false) {
@@ -101,8 +104,17 @@ Drainage.prototype._process = function () {
     this._handler(this._nextTask());
   }
 
-  // Emit drained if there are no more items in the queue
-  if  (this._queueIds.length === 0) {
-    this.emit('shortage', (this._concurrency - this._inprogress));
+  // Await a tick to insure that only one shortage event will be emitted
+  if (this._shortageEmitting === false && this._queueLength === 0) {
+    this._shortageEmitting = true;
+
+    process.nextTick(function () {
+      self._shortageEmitting = false;
+
+      // Emit drained if there are no more items in the queue
+      if (self._queueLength === 0) {
+        self.emit('shortage', (self._concurrency - self._inprogress));
+      }
+    });
   }
 };
