@@ -1,7 +1,7 @@
 {
   "name": "drainage",
   "description": "Simple pausable id based queue system with shortage notification",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Andreas Madsen <amwebdk@gmail.com>",
   "main": "./drainage.js",
   "scripts": {
