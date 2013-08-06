@@ -142,7 +142,7 @@ test('will order tasks by priority', function (t) {
       queue.done(task);
     });
   });
-	
+
 	queue.once('shortage', function (amount) {
     if (jobnum === 4) {
       t.equal(amount, 1);
@@ -155,4 +155,19 @@ test('will order tasks by priority', function (t) {
   queue.push(expected[2]);
   queue.push(expected[1]);
   queue.push(expected[3]);
+});
+
+test('fetch will emit drainage again', function (t) {
+  var queue = drainage({priority: [0, 2]}, function (task) { });
+
+  queue.once('shortage', function (amount) {
+    t.equal(amount, 1);
+
+    queue.once('shortage', function (amount) {
+      t.equal(amount, 1);
+      t.end();
+    });
+
+    queue.fetch();
+	});
 });

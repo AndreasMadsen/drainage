@@ -118,3 +118,10 @@ Drainage.prototype._process = function () {
     });
   }
 };
+
+// emit the shortage event again, but only if there is a need for more jobs
+Drainage.prototype.fetch = function () {
+  if (this._shortageEmitting === false && this._queueLength === 0) {
+    this.emit('shortage', (this._concurrency - this._inprogress));
+  }
+};

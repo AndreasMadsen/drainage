@@ -48,6 +48,12 @@ queue.pause();
 
 // Start processing tasks, no need to call this unless `.pause` has been called
 queue.resume();
+
+// Maybe you have some job event that drainage isn't aware of, in that case call
+// the fetch. This will emit the shortage event, but only if there is a shortage.
+process.on('SIGPOLL', function () {
+  query.fetch();
+});
 ```
 
 ##License
