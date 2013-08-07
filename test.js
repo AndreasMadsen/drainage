@@ -6,7 +6,6 @@ var JOBS = 'abcdefghijklmnopqrstuvxyz'.split('').map(function (value, index) {
   return {id: index, job: value};
 });
 
-/*
 test('can process simple job with 1 concurrency', function (t) {
   var jobnum = 0;
   var queue = drainage(function (task) {
@@ -23,7 +22,6 @@ test('can process simple job with 1 concurrency', function (t) {
   queue.push(JOBS[0]);
   queue.push(JOBS[1]);
 });
-*/
 
 test('will emit shortage once tasks is needed', function (t) {
   var jobnum = 0;
