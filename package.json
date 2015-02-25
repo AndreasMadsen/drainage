@@ -1,11 +1,11 @@
 {
   "name": "drainage",
   "description": "Simple pausable id based queue system with shortage notification",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Andreas Madsen <amwebdk@gmail.com>",
   "main": "./drainage.js",
   "scripts": {
-    "test": "tap test/runner.js"
+    "test": "tap test.js"
   },
   "repository" : {
     "type": "git",
@@ -17,11 +17,7 @@
     "shortage"
   ],
   "devDependencies": {
-    "tap": "0.4.x"
+    "tap": "0.6.x"
   },
-  "license": "MIT",
-  "engines": {
-    "node": "0.10",
-    "npm": "1"
-  }
+  "license": "MIT"
 }
